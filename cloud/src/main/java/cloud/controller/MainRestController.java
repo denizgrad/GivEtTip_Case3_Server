@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import cloud.model.entity.Sample;
+import cloud.model.entity.User;
 import cloud.model.response.Response;
 import cloud.service.ISampleService;
 
@@ -36,6 +37,10 @@ public class MainRestController {
 	@ResponseBody
 	@RequestMapping(value = "/listSample", produces = "application/json", method = RequestMethod.GET)
 	public ResponseEntity<List<Sample>> test() {
+		User u = new User();
+		u.setPassword("nesto");
+		u.setEmail("nesto");
+		
 		return new ResponseEntity<>(sampleService.listAll(), HttpStatus.OK);
 	}
 

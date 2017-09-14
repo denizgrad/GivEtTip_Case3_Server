@@ -14,8 +14,9 @@ public class Sample {
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	private String oid;
 	
-	String name;
-	String code;
+	private String name;
+	private String code;
+	
 	public String getName() {
 		return name;
 	}
