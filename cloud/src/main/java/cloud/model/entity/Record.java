@@ -1,7 +1,6 @@
 package cloud.model.entity;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,15 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Record {
@@ -54,6 +48,9 @@ public class Record {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date creationDateTime;
+	
+	@Column(nullable = false)
+	private boolean done;
 	
 	/* public methods */
 	
@@ -104,5 +101,11 @@ public class Record {
 	}
 	public void setCreationDateTime(Date creationDateTime) {
 		this.creationDateTime = creationDateTime;
+	}
+	public boolean getdone() {
+		return done;
+	}
+	public void setDone(boolean done) {
+		this.done = done;
 	}
 }

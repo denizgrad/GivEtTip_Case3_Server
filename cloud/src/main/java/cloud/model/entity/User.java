@@ -15,7 +15,6 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import cloud.controller.EncryptionController;
 
@@ -47,6 +46,9 @@ public class User {
 		
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdateDateTime;
+	
+	@Column(nullable = false)
+	private boolean active;
 	
 	@OneToMany(mappedBy="author", fetch=FetchType.EAGER)
 	private List<Record> records;
@@ -94,6 +96,12 @@ public class User {
 	}
 	public void setLastUpdateDateTime(Date lastUpdateDateTime) {
 		this.lastUpdateDateTime = lastUpdateDateTime;
+	}
+	public boolean getActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 	public List<Record> getRecords() {

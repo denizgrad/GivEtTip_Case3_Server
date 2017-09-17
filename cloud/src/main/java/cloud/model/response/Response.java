@@ -2,7 +2,7 @@ package cloud.model.response;
 
 public class Response {
 
-	private boolean   success;
+	private boolean success;
     private int statusCode;
     private String returnKey;
     private String statusMessage;

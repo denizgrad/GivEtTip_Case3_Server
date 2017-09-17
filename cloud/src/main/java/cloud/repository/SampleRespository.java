@@ -15,4 +15,3 @@ public interface SampleRespository extends JpaRepository<Sample, Long>{
 	@Query("SELECT s FROM Sample s")
 	public List<Sample> listAll();
 }
-
