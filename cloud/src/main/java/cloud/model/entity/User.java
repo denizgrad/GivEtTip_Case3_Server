@@ -1,5 +1,6 @@
 package cloud.model.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -8,11 +9,13 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 import org.hibernate.validator.constraints.Email;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import cloud.controller.EncryptionController;
 
 @Entity
-public class User extends BaseModel {
+public class User extends BaseModel implements Serializable {
 	@Column(nullable = false)
 	private String name;
 	
@@ -30,6 +33,7 @@ public class User extends BaseModel {
 	private boolean active;
 	
 	@OneToMany(mappedBy="author", fetch=FetchType.EAGER)
+	@JsonManagedReference
 	private List<Record> records;
 	
 	/* public methods */

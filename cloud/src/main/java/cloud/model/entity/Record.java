@@ -1,19 +1,24 @@
 package cloud.model.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 //import java.math.BigDecimal;
 
 @Entity
-public class Record extends BaseModel {
+public class Record extends BaseModel implements Serializable {
 //	@Id
 //	@SequenceGenerator(name = "id", sequenceName = "id")
 //	@GeneratedValue(strategy = GenerationType.AUTO, generator="id")  
 //	private int id;
 	
 	@ManyToOne
+	@JsonBackReference
 	private User author;
 	
 	@Column(nullable = false)
