@@ -38,9 +38,7 @@ public class MainRestController {
 	public ResponseEntity<Response> createSample(@RequestBody Sample sample) {
 		sampleService.create(sample);
 		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
-		
 		resp.setReturnKey(sample.getOid());
-		
 		return new ResponseEntity<>(resp, HttpStatus.OK);
 	}
 	
@@ -50,9 +48,12 @@ public class MainRestController {
 		User u = new User();
 		u.setPassword("nesto");
 		u.setEmail("nesto");
-		
 		return new ResponseEntity<>(sampleService.listAll(), HttpStatus.OK);
 	}
+	
+	// TODO
+	// 1. Try and catch for users (because of passwords).
+	// 2. Delete methods should return a value.
 	
 	
 	/* User Rest Controller */
@@ -63,9 +64,9 @@ public class MainRestController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/users/{userId}", produces = "application/json", method = RequestMethod.GET)
-	public ResponseEntity<User> getUser(@PathVariable(value="userId") String userId) {		
-		return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
+	@RequestMapping(value = "/users/{id}", produces = "application/json", method = RequestMethod.GET)
+	public ResponseEntity<User> getUser(@PathVariable(value="id") int id) {		
+		return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
 	}
 	
 	@ResponseBody
@@ -73,7 +74,7 @@ public class MainRestController {
 	public ResponseEntity<Response> createUser(@RequestBody User user) {
 		userService.createUser(user);
 		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
-		resp.setReturnKey(user.getUserId());
+		resp.setReturnKey(Integer.toString(user.getId()));
 		return new ResponseEntity<>(resp, HttpStatus.OK);
 	}
 	
@@ -82,7 +83,16 @@ public class MainRestController {
 	public ResponseEntity<Response> updateUser(@RequestBody User user) {
 		userService.updateUser(user);
 		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
-		resp.setReturnKey(user.getUserId());
+		resp.setReturnKey(Integer.toString(user.getId()));
+		return new ResponseEntity<>(resp, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/users/{id}", produces = "application/json", method = RequestMethod.DELETE)
+	public ResponseEntity<Response> deleteUser(@PathVariable(value="id") int id) {
+		userService.deleteUser(id);
+		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
+		resp.setReturnKey(Integer.toString(id));
 		return new ResponseEntity<>(resp, HttpStatus.OK);
 	}
 	
@@ -115,6 +125,15 @@ public class MainRestController {
 		recordService.updateRecord(record);
 		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
 		resp.setReturnKey(Integer.toString(record.getId()));
+		return new ResponseEntity<>(resp, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/records/{id}", produces = "application/json", method = RequestMethod.DELETE)
+	public ResponseEntity<Response> deleteRecord(@PathVariable(value="id") int id) {
+		recordService.deleteRecord(id);
+		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
+		resp.setReturnKey(Integer.toString(id));
 		return new ResponseEntity<>(resp, HttpStatus.OK);
 	}
 	

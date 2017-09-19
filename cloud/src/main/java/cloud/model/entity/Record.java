@@ -1,35 +1,22 @@
 package cloud.model.entity;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.springframework.data.annotation.CreatedDate;
 
 @Entity
-public class Record {
+public class Record extends BaseModel {
 //	@Id
 //	@SequenceGenerator(name = "id", sequenceName = "id")
 //	@GeneratedValue(strategy = GenerationType.AUTO, generator="id")  
 //	private int id;
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
-	
 	@Column(nullable = false)
-	private String authorId;
+	private int authorId;
 	
 	@ManyToOne
-	@JoinColumn(name="userId")
+	@JoinColumn(name="id")
 	private User author;
 	
 	@Column(nullable = false)
@@ -44,26 +31,15 @@ public class Record {
 	@Column(nullable = false)
 	private String description;
 	
-	@CreatedDate
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
-	private Date creationDateTime;
-	
 	@Column(nullable = false)
 	private boolean done;
 	
 	/* public methods */
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getAuthorId() {
+	public int getAuthorId() {
 		return authorId;
 	}
-	public void setAuthorId(String authorId) {
+	public void setAuthorId(int authorId) {
 		this.authorId = authorId;
 	}
 	public User getAuthor() {
@@ -96,13 +72,7 @@ public class Record {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Date getCreationDateTime() {
-		return creationDateTime;
-	}
-	public void setCreationDateTime(Date creationDateTime) {
-		this.creationDateTime = creationDateTime;
-	}
-	public boolean getdone() {
+	public boolean getDone() {
 		return done;
 	}
 	public void setDone(boolean done) {

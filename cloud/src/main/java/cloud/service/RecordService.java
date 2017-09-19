@@ -1,9 +1,11 @@
 package cloud.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,10 +36,20 @@ public class RecordService implements IRecordService{
 	@Override
 	public void updateRecord(Record newRecord) {
 		Record temp = getRecord(newRecord.getId());
-		
-		// TODO: Copy all properties. Is there an easy way?
-		temp.setAuthor(newRecord.getAuthor());
-		// ...
-		// repo.save(temp);
+		temp.setLastUpdateDate(new Date());
+		temp.setDescription(newRecord.getDescription());
+		temp.setGpsLatitude(newRecord.getGpsLatitude());
+		temp.setGpsLongitude(newRecord.getGpsLongitude());
+		temp.setImagePath(newRecord.getImagePath());
+		temp.setDone(newRecord.getDone());
+		temp.setDeleted(newRecord.isDeleted());
+		repo.save(temp);
+	}
+	
+	@Override
+	public void deleteRecord(int id) {
+		Record temp = getRecord(id);
+		temp.setDeleted(true);
+		repo.save(temp);
 	}
 }

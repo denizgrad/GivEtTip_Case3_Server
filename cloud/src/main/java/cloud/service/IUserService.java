@@ -6,7 +6,8 @@ import cloud.model.entity.User;
 
 public interface IUserService {
 	public List<User> getUsers();
-	public User getUser(String userId);
+	public User getUser(int id);
 	public void createUser(User u);
 	public void updateUser(User newUser);
+	public void deleteUser(int id);
 }
