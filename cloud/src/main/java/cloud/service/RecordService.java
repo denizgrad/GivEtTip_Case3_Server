@@ -5,7 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,9 @@ import cloud.repository.RecordRepositoriy;
 @Component
 @Transactional
 public class RecordService implements IRecordService{
+	@Autowired
+	Environment env;
+	
 	@Resource
 	RecordRepositoriy repo;
 	
@@ -36,6 +40,9 @@ public class RecordService implements IRecordService{
 	@Override
 	public void updateRecord(Record newRecord) {
 		Record temp = getRecord(newRecord.getId());
+		if (temp == null)
+			throw new RuntimeException(env.getProperty("object_not_found"));
+		
 		temp.setLastUpdateDate(new Date());
 		temp.setDescription(newRecord.getDescription());
 		temp.setGpsLatitude(newRecord.getGpsLatitude());
@@ -49,6 +56,8 @@ public class RecordService implements IRecordService{
 	@Override
 	public void deleteRecord(int id) {
 		Record temp = getRecord(id);
+		if (temp == null)
+			throw new RuntimeException(env.getProperty("object_not_found"));
 		temp.setDeleted(true);
 		repo.save(temp);
 	}

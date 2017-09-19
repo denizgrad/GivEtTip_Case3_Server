@@ -20,28 +20,27 @@ import cloud.service.IRecordService;
 import cloud.service.ISampleService;
 import cloud.service.IUserService;
 
-
 @RestController
 @RequestMapping("/main")
 public class MainRestController {
 	@Autowired
 	ISampleService sampleService;
-	
+
 	@Autowired
 	IUserService userService;
-	
+
 	@Autowired
 	IRecordService recordService;
-	
+
 	@ResponseBody
-	@RequestMapping(value = "/createSample",  consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value = "/createSample", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Response> createSample(@RequestBody Sample sample) {
 		sampleService.create(sample);
 		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
 		resp.setReturnKey(sample.getOid());
 		return new ResponseEntity<>(resp, HttpStatus.OK);
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/listSample", produces = "application/json", method = RequestMethod.GET)
 	public ResponseEntity<List<Sample>> test() {
@@ -51,90 +50,133 @@ public class MainRestController {
 		return new ResponseEntity<>(sampleService.listAll(), HttpStatus.OK);
 	}
 	
-	// TODO
-	// 1. Try and catch for users (because of passwords).
-	// 2. Delete methods should return a value.
-	
 	
 	/* User Rest Controller */
 	@ResponseBody
 	@RequestMapping(value = "/users", produces = "application/json", method = RequestMethod.GET)
-	public ResponseEntity<List<User>> getUsers() {		
-		return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+	public ResponseEntity<List<User>> getUsers() {
+		try {
+			return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/users/{id}", produces = "application/json", method = RequestMethod.GET)
-	public ResponseEntity<User> getUser(@PathVariable(value="id") int id) {		
-		return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
+	public ResponseEntity<User> getUser(@PathVariable(value = "id") int id) {
+		try {
+			return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value = "/users",  consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value = "/users", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Response> createUser(@RequestBody User user) {
-		userService.createUser(user);
-		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
-		resp.setReturnKey(Integer.toString(user.getId()));
-		return new ResponseEntity<>(resp, HttpStatus.OK);
+		try {
+			userService.createUser(user);
+			Response resp = new Response(true, HttpStatus.OK.value(), "Success");
+			resp.setReturnKey(Integer.toString(user.getId()));
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value = "/users",  consumes = "application/json", produces = "application/json", method = RequestMethod.PUT)
+	@RequestMapping(value = "/users", consumes = "application/json", produces = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<Response> updateUser(@RequestBody User user) {
-		userService.updateUser(user);
-		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
-		resp.setReturnKey(Integer.toString(user.getId()));
-		return new ResponseEntity<>(resp, HttpStatus.OK);
+		try {
+			userService.updateUser(user);
+			Response resp = new Response(true, HttpStatus.OK.value(), "Success");
+			resp.setReturnKey(Integer.toString(user.getId()));
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		} catch (RuntimeException ex) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/users/{id}", produces = "application/json", method = RequestMethod.DELETE)
-	public ResponseEntity<Response> deleteUser(@PathVariable(value="id") int id) {
-		userService.deleteUser(id);
-		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
-		resp.setReturnKey(Integer.toString(id));
-		return new ResponseEntity<>(resp, HttpStatus.OK);
+	public ResponseEntity<Response> deleteUser(@PathVariable(value = "id") int id) {
+		try {
+			userService.deleteUser(id);
+			Response resp = new Response(true, HttpStatus.OK.value(), "Success");
+			resp.setReturnKey(Integer.toString(id));
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		} catch (RuntimeException ex) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
-	
-	
+
 	/* Record Rest Controller */
 	@ResponseBody
 	@RequestMapping(value = "/records", produces = "application/json", method = RequestMethod.GET)
-	public ResponseEntity<List<Record>> getRecords() {		
-		return new ResponseEntity<>(recordService.getRecords(), HttpStatus.OK);
+	public ResponseEntity<List<Record>> getRecords() {
+		try {
+			return new ResponseEntity<>(recordService.getRecords(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/records/{id}", produces = "application/json", method = RequestMethod.GET)
-	public ResponseEntity<Record> getRecord(@PathVariable(value="id") int id) {		
-		return new ResponseEntity<>(recordService.getRecord(id), HttpStatus.OK);
+	public ResponseEntity<Record> getRecord(@PathVariable(value = "id") int id) {
+		try {
+			return new ResponseEntity<>(recordService.getRecord(id), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value = "/records",  consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value = "/records", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Response> createRecord(@RequestBody Record record) {
-		recordService.createRecord(record);
-		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
-		resp.setReturnKey(Integer.toString(record.getId()));
-		return new ResponseEntity<>(resp, HttpStatus.OK);
+		try {
+			recordService.createRecord(record);
+			Response resp = new Response(true, HttpStatus.OK.value(), "Success");
+			resp.setReturnKey(Integer.toString(record.getId()));
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value = "/records",  consumes = "application/json", produces = "application/json", method = RequestMethod.PUT)
+	@RequestMapping(value = "/records", consumes = "application/json", produces = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<Response> updateRecord(@RequestBody Record record) {
-		recordService.updateRecord(record);
-		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
-		resp.setReturnKey(Integer.toString(record.getId()));
-		return new ResponseEntity<>(resp, HttpStatus.OK);
+		try {
+			recordService.updateRecord(record);
+			Response resp = new Response(true, HttpStatus.OK.value(), "Success");
+			resp.setReturnKey(Integer.toString(record.getId()));
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		} catch (RuntimeException ex) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/records/{id}", produces = "application/json", method = RequestMethod.DELETE)
-	public ResponseEntity<Response> deleteRecord(@PathVariable(value="id") int id) {
-		recordService.deleteRecord(id);
-		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
-		resp.setReturnKey(Integer.toString(id));
-		return new ResponseEntity<>(resp, HttpStatus.OK);
+	public ResponseEntity<Response> deleteRecord(@PathVariable(value = "id") int id) {
+		try {
+			recordService.deleteRecord(id);
+			Response resp = new Response(true, HttpStatus.OK.value(), "Success");
+			resp.setReturnKey(Integer.toString(id));
+			return new ResponseEntity<>(resp, HttpStatus.OK);
+		} catch (RuntimeException ex) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
-	
+
 }
