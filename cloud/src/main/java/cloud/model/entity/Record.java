@@ -2,7 +2,6 @@ package cloud.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -12,11 +11,7 @@ public class Record extends BaseModel {
 //	@GeneratedValue(strategy = GenerationType.AUTO, generator="id")  
 //	private int id;
 	
-	@Column(nullable = false)
-	private int authorId;
-	
 	@ManyToOne
-	@JoinColumn(name="id")
 	private User author;
 	
 	@Column(nullable = false)
@@ -36,12 +31,6 @@ public class Record extends BaseModel {
 	
 	/* public methods */
 	
-	public int getAuthorId() {
-		return authorId;
-	}
-	public void setAuthorId(int authorId) {
-		this.authorId = authorId;
-	}
 	public User getAuthor() {
 		return author;
 	}

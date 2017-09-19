@@ -20,31 +20,52 @@ import cloud.repository.UserRepositoriy;
 public class UserService implements IUserService {
 	@Autowired
 	Environment env;
-	
+
 	@Resource
 	UserRepositoriy repo;
-	
+
 	@Override
 	public List<User> getUsers() {
 		return repo.getUsers();
 	}
-	
+
 	@Override
 	public User getUser(int id) {
-		return repo.getUser(id);
+		User u = repo.getUser(id);
+		if (u != null)
+			return repo.getUser(id);
+		else
+			throw new RuntimeException("The user does not exists.");
 	}
-	
+
+	@Override
+	public User getUserByEmail(String email) {
+		return repo.getUserByEmail(email);
+	}
+
+	@Override
+	public boolean doesUserExists(String email) {
+		if (getUserByEmail(email) != null)
+			return true;
+		else
+			return false;
+	}
+
 	@Override
 	public void createUser(User u) {
+		u.setCreatedDate(new Date());
+		u.setLastUpdateDate(new Date());
+		u.setActive(true);
+		u.setDeleted(false);
 		repo.save(u);
 	}
-	
+
 	@Override
 	public void updateUser(User newUser) {
 		User temp = getUser(newUser.getId());
 		if (temp == null)
 			throw new RuntimeException(env.getProperty("object_not_found"));
-		
+
 		temp.setLastUpdateDate(new Date());
 		temp.setEmail(newUser.getEmail());
 		temp.setName(newUser.getName());
@@ -53,9 +74,9 @@ public class UserService implements IUserService {
 		temp.setDeleted(newUser.isDeleted());
 		if (StringUtils.isNotEmpty(newUser.getPassword()) && StringUtils.isNotBlank(newUser.getPassword()))
 			temp.setPassword(newUser.getPassword());
-		 repo.save(temp);
+		repo.save(temp);
 	}
-	
+
 	@Override
 	public void deleteUser(int id) {
 		User temp = getUser(id);

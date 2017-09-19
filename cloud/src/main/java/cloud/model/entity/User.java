@@ -20,7 +20,7 @@ public class User extends BaseModel {
 	private String surname;
 	
 	@Email
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String email;
 	
 	@Column(nullable = false)
@@ -55,7 +55,8 @@ public class User extends BaseModel {
 		return password;
 	}
 	public void setPassword(String password) {
-		this.password = EncryptionController.sha1(password);
+		this.password = password;
+		//this.password = EncryptionController.sha1(password);
 	}
 	public boolean getActive() {
 		return active;

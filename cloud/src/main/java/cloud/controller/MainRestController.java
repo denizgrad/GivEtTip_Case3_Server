@@ -23,8 +23,8 @@ import cloud.service.IUserService;
 @RestController
 @RequestMapping("/main")
 public class MainRestController {
-	@Autowired
-	ISampleService sampleService;
+	/* @Autowired
+	ISampleService sampleService; */
 
 	@Autowired
 	IUserService userService;
@@ -32,6 +32,7 @@ public class MainRestController {
 	@Autowired
 	IRecordService recordService;
 
+	/*
 	@ResponseBody
 	@RequestMapping(value = "/createSample", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Response> createSample(@RequestBody Sample sample) {
@@ -49,8 +50,8 @@ public class MainRestController {
 		u.setEmail("nesto");
 		return new ResponseEntity<>(sampleService.listAll(), HttpStatus.OK);
 	}
-	
-	
+	*/
+
 	/* User Rest Controller */
 	@ResponseBody
 	@RequestMapping(value = "/users", produces = "application/json", method = RequestMethod.GET)
@@ -67,8 +68,10 @@ public class MainRestController {
 	public ResponseEntity<User> getUser(@PathVariable(value = "id") int id) {
 		try {
 			return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (RuntimeException ex) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -77,11 +80,17 @@ public class MainRestController {
 	public ResponseEntity<Response> createUser(@RequestBody User user) {
 		try {
 			userService.createUser(user);
-			Response resp = new Response(true, HttpStatus.OK.value(), "Success");
+			Response resp = new Response(true, HttpStatus.CREATED.value(), "Success");
 			resp.setReturnKey(Integer.toString(user.getId()));
-			return new ResponseEntity<>(resp, HttpStatus.OK);
+			return new ResponseEntity<>(resp, HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			if (userService.doesUserExists(user.getEmail())) {
+				Response resp = new Response(false, HttpStatus.CONFLICT.value(),
+						"User with this email already exists.");
+				return new ResponseEntity<>(resp, HttpStatus.CONFLICT);
+			} else {
+				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 		}
 	}
 
@@ -125,14 +134,16 @@ public class MainRestController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	@ResponseBody
 	@RequestMapping(value = "/records/{id}", produces = "application/json", method = RequestMethod.GET)
 	public ResponseEntity<Record> getRecord(@PathVariable(value = "id") int id) {
 		try {
 			return new ResponseEntity<>(recordService.getRecord(id), HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (RuntimeException ex) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -141,13 +152,13 @@ public class MainRestController {
 	public ResponseEntity<Response> createRecord(@RequestBody Record record) {
 		try {
 			recordService.createRecord(record);
-			Response resp = new Response(true, HttpStatus.OK.value(), "Success");
+			Response resp = new Response(true, HttpStatus.CREATED.value(), "Success");
 			resp.setReturnKey(Integer.toString(record.getId()));
-			return new ResponseEntity<>(resp, HttpStatus.OK);
+			return new ResponseEntity<>(resp, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}
+	}	
 
 	@ResponseBody
 	@RequestMapping(value = "/records", consumes = "application/json", produces = "application/json", method = RequestMethod.PUT)

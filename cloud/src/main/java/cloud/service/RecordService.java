@@ -34,6 +34,10 @@ public class RecordService implements IRecordService{
 	
 	@Override
 	public void createRecord(Record r) {
+		r.setCreatedDate(new Date());
+		r.setLastUpdateDate(new Date());
+		r.setDeleted(false);
+		r.setDone(false);
 		repo.save(r);
 	}
 	
