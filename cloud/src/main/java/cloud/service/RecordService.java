@@ -29,7 +29,11 @@ public class RecordService implements IRecordService{
 	
 	@Override
 	public Record getRecord(int id) {
-		return repo.getRecord(id);
+		Record r = repo.getRecord(id);
+		if (r != null)
+			return r;
+		else
+			throw new RuntimeException("The record does not exists.");
 	}
 	
 	@Override
@@ -63,6 +67,7 @@ public class RecordService implements IRecordService{
 		if (temp == null)
 			throw new RuntimeException(env.getProperty("object_not_found"));
 		temp.setDeleted(true);
+		temp.setLastUpdateDate(new Date());
 		repo.save(temp);
 	}
 }

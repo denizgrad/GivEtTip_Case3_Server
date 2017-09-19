@@ -33,7 +33,7 @@ public class UserService implements IUserService {
 	public User getUser(int id) {
 		User u = repo.getUser(id);
 		if (u != null)
-			return repo.getUser(id);
+			return u;
 		else
 			throw new RuntimeException("The user does not exists.");
 	}
@@ -83,6 +83,7 @@ public class UserService implements IUserService {
 		if (temp == null)
 			throw new RuntimeException(env.getProperty("object_not_found"));
 		temp.setDeleted(true);
+		temp.setLastUpdateDate(new Date());
 		repo.save(temp);
 	}
 }

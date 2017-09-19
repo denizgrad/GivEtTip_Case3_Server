@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
+//import java.math.BigDecimal;
+
 @Entity
 public class Record extends BaseModel {
 //	@Id
@@ -18,10 +20,10 @@ public class Record extends BaseModel {
 	private String imagePath;
 	
 	@Column(nullable = false)
-	private String gpsLatitude;
+	private double gpsLatitude;
 	
 	@Column(nullable = false)
-	private String gpsLongitude;
+	private double gpsLongitude;
 	
 	@Column(nullable = false)
 	private String description;
@@ -43,16 +45,17 @@ public class Record extends BaseModel {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
-	public String getGpsLatitude() {
+	public double getGpsLatitude() {
 		return gpsLatitude;
 	}
-	public void setGpsLatitude(String gpsLatitude) {
+	public void setGpsLatitude(double gpsLatitude) {
+//		gpsLatitude.setScale(120, BigDecimal.ROUND_HALF_UP);
 		this.gpsLatitude = gpsLatitude;
-	}
-	public String getGpsLongitude() {
+	}	
+	public double getGpsLongitude() {
 		return gpsLongitude;
 	}
-	public void setGpsLongitude(String gpsLongitude) {
+	public void setGpsLongitude(double gpsLongitude) {
 		this.gpsLongitude = gpsLongitude;
 	}
 	public String getDescription() {
