@@ -1,0 +1,36 @@
+bluemix push process
+
+1) build app as a war file
+In eclipse rigth click yo project
+	-run as..
+	-Maven Build
+	-Goals: clean package (it is just for the first time)
+	-Locate .war file under target folder
+		ex:C:\Users\User\git\GivEtTip_Case3_Server\cloud\target
+
+2) 
+giveettip is the APP_NAME for my bluemix server
+Connect to Bluemix
+	bluemix api https://api.eu-de.bluemix.net
+Login to bluemix
+	bluemix login deuze17
+if no org or space set execute auto-detect
+	bluemix target --cf
+	
+first time config:
+{
+	set the jvm arg (must be done to differentiate btw local and cloud)
+	bluemix cf set-env giveettip app.properties META-INF/app.cloud.properties
+
+	unset (in case of anything goes wrong)
+	bluemix cf unset-env giveettip app.properties
+
+	restart app (after creating any jvm arg)
+	bluemix app restart giveettip
+
+	see logs
+	bluemix app logs giveettip --recent
+}
+
+Push war file (go to target folder)
+bluemix app push giveettip -p .\cloud.war
