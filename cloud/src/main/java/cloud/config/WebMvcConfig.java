@@ -26,7 +26,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan({"cloud.controller", "cloud.service"})
 @EnableTransactionManagement
 @EnableJpaRepositories("cloud.repository")
-@PropertySource("classpath:META-INF/app.properties")
+@PropertySource("classpath:${app.properties}")
 public class WebMvcConfig {
 	@Autowired
 	Environment env;
