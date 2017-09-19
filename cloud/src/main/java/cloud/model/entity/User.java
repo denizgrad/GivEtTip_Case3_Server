@@ -1,31 +1,18 @@
 package cloud.model.entity;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Email;
-import org.springframework.data.annotation.CreatedDate;
 
 import cloud.controller.EncryptionController;
 
 @Entity
-public class User {
-
-	@Id
-	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")
-	private String userId;
-
+public class User extends BaseModel {
 	@Column(nullable = false)
 	private String name;
 	
@@ -33,19 +20,11 @@ public class User {
 	private String surname;
 	
 	@Email
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String email;
 	
 	@Column(nullable = false)
 	private String password;
-	
-	@CreatedDate
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
-	private Date registrationDateTime;
-		
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date lastUpdateDateTime;
 	
 	@Column(nullable = false)
 	private boolean active;
@@ -54,13 +33,6 @@ public class User {
 	private List<Record> records;
 	
 	/* public methods */
-	
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String id) {
-		this.userId = id;
-	}
 	public String getName() {
 		return name;
 	}
@@ -83,19 +55,8 @@ public class User {
 		return password;
 	}
 	public void setPassword(String password) {
-		this.password = EncryptionController.sha1(password);
-	}
-	public Date getRegistrationDateTime() {
-		return registrationDateTime;
-	}
-	public void setRegistrationDateTime(Date registrationDateTime) {
-		this.registrationDateTime = registrationDateTime;
-	}
-	public Date getLastUpdateDateTime() {
-		return lastUpdateDateTime;
-	}
-	public void setLastUpdateDateTime(Date lastUpdateDateTime) {
-		this.lastUpdateDateTime = lastUpdateDateTime;
+		this.password = password;
+		//this.password = EncryptionController.sha1(password);
 	}
 	public boolean getActive() {
 		return active;
@@ -103,7 +64,6 @@ public class User {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
 	public List<Record> getRecords() {
 		return records;
 	}

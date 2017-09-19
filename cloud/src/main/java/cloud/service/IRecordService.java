@@ -9,4 +9,5 @@ public interface IRecordService {
 	public Record getRecord(int id);
 	public void createRecord(Record r);
 	public void updateRecord(Record newRecord);
+	public void deleteRecord(int id);
 }
