@@ -20,17 +20,20 @@ if no org or space set execute auto-detect
 first time config:
 {
 	set the jvm arg (must be done to differentiate btw local and cloud)
-	bluemix cf set-env giveettip app.properties META-INF/app.cloud.properties
+	bluemix cf set-env getJavaApi app.properties META-INF/app.cloud.properties
 
 	unset (in case of anything goes wrong)
-	bluemix cf unset-env giveettip app.properties
+	bluemix cf unset-env getJavaApi app.properties
 
 	restart app (after creating any jvm arg)
-	bluemix app restart giveettip
+	bluemix app restart getJavaApi
 
 	see logs
-	bluemix app logs giveettip --recent
+	bluemix app logs getJavaApi --recent
+
+	This is really important line in logs. It must be at the end of the log file!
+	2017-09-20T12:53:54.78+0200 [APP/PROC/WEB/0] OUT [INFO    ] SRVE0242I: [myapp] [/] [appServlet]: Initialization successful.
 }
 
 Push war file (go to target folder)
-bluemix app push giveettip -p .\cloud.war
+bluemix app push getJavaApi -p .\cloud.war
