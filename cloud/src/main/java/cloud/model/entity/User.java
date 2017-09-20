@@ -9,10 +9,9 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 import org.hibernate.validator.constraints.Email;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import cloud.controller.EncryptionController;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class User extends BaseModel implements Serializable {
@@ -55,9 +54,11 @@ public class User extends BaseModel implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	@JsonIgnore		// it is ignored when getting an user
 	public String getPassword() {
 		return password;
 	}
+	@JsonProperty	// it is serialized when posting an user
 	public void setPassword(String password) {
 		this.password = password;
 		//this.password = EncryptionController.sha1(password);

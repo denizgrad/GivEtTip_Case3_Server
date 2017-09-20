@@ -89,7 +89,8 @@ public class MainRestController {
 						"User with this email already exists.");
 				return new ResponseEntity<>(resp, HttpStatus.CONFLICT);
 			} else {
-				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+				Response resp = new Response(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.toString());
+				return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 	}
@@ -105,7 +106,8 @@ public class MainRestController {
 		} catch (RuntimeException ex) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			Response resp = new Response(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.toString());
+			return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

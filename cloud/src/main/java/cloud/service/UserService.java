@@ -12,6 +12,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import cloud.controller.EncryptionUtility;
 import cloud.model.entity.User;
 import cloud.repository.UserRepositoriy;
 
@@ -52,7 +53,8 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public void createUser(User u) {
+	public void createUser(User u) throws Exception {
+		u.setPassword(EncryptionUtility.getSaltedHash(u.getPassword()));
 		u.setCreatedDate(new Date());
 		u.setLastUpdateDate(new Date());
 		u.setActive(true);
@@ -61,7 +63,7 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public void updateUser(User newUser) {
+	public void updateUser(User newUser) throws Exception {
 		User temp = getUser(newUser.getId());
 		if (temp == null)
 			throw new RuntimeException(env.getProperty("object_not_found"));
@@ -73,7 +75,7 @@ public class UserService implements IUserService {
 		temp.setActive(newUser.getActive());
 		temp.setDeleted(newUser.isDeleted());
 		if (StringUtils.isNotEmpty(newUser.getPassword()) && StringUtils.isNotBlank(newUser.getPassword()))
-			temp.setPassword(newUser.getPassword());
+			temp.setPassword(EncryptionUtility.getSaltedHash(newUser.getPassword()));
 		repo.save(temp);
 	}
 
