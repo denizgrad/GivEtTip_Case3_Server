@@ -23,8 +23,9 @@ import cloud.service.IUserService;
 @RestController
 @RequestMapping("/main")
 public class MainRestController {
-	/* @Autowired
-	ISampleService sampleService; */
+	/*
+	 * @Autowired ISampleService sampleService;
+	 */
 
 	@Autowired
 	IUserService userService;
@@ -33,24 +34,22 @@ public class MainRestController {
 	IRecordService recordService;
 
 	/*
-	@ResponseBody
-	@RequestMapping(value = "/createSample", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Response> createSample(@RequestBody Sample sample) {
-		sampleService.create(sample);
-		Response resp = new Response(true, HttpStatus.OK.value(), "Success");
-		resp.setReturnKey(sample.getOid());
-		return new ResponseEntity<>(resp, HttpStatus.OK);
-	}
-
-	@ResponseBody
-	@RequestMapping(value = "/listSample", produces = "application/json", method = RequestMethod.GET)
-	public ResponseEntity<List<Sample>> test() {
-		User u = new User();
-		u.setPassword("nesto");
-		u.setEmail("nesto");
-		return new ResponseEntity<>(sampleService.listAll(), HttpStatus.OK);
-	}
-	*/
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping(value = "/createSample", consumes = "application/json",
+	 * produces = "application/json", method = RequestMethod.POST) public
+	 * ResponseEntity<Response> createSample(@RequestBody Sample sample) {
+	 * sampleService.create(sample); Response resp = new Response(true,
+	 * HttpStatus.OK.value(), "Success"); resp.setReturnKey(sample.getOid()); return
+	 * new ResponseEntity<>(resp, HttpStatus.OK); }
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping(value = "/listSample", produces = "application/json", method
+	 * = RequestMethod.GET) public ResponseEntity<List<Sample>> test() { User u =
+	 * new User(); u.setPassword("nesto"); u.setEmail("nesto"); return new
+	 * ResponseEntity<>(sampleService.listAll(), HttpStatus.OK); }
+	 */
 
 	/* User Rest Controller */
 	@ResponseBody
@@ -126,6 +125,29 @@ public class MainRestController {
 		}
 	}
 
+	
+	/* Login Rest Controller */
+	@ResponseBody
+	@RequestMapping(value = "/login", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+	public ResponseEntity<Response> login(@RequestBody User user) {
+		try {
+			boolean success = userService.login(user);
+			if (success) {
+				Response resp = new Response(true, HttpStatus.OK.value(), "Success");
+				resp.setReturnKey(Integer.toString(user.getId()));
+				return new ResponseEntity<>(resp, HttpStatus.OK);
+			} else {
+				Response resp = new Response(false, HttpStatus.UNAUTHORIZED.value(), "The password is not correct.");
+				resp.setReturnKey(Integer.toString(user.getId()));
+				return new ResponseEntity<>(resp, HttpStatus.UNAUTHORIZED);
+			}
+		} catch (Exception e) {
+			Response resp = new Response(false, HttpStatus.UNAUTHORIZED.value(), e.toString());
+			return new ResponseEntity<>(resp, HttpStatus.UNAUTHORIZED);
+		}
+	}
+
+	
 	/* Record Rest Controller */
 	@ResponseBody
 	@RequestMapping(value = "/records", produces = "application/json", method = RequestMethod.GET)
@@ -136,7 +158,7 @@ public class MainRestController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/records/{id}", produces = "application/json", method = RequestMethod.GET)
 	public ResponseEntity<Record> getRecord(@PathVariable(value = "id") int id) {
@@ -160,7 +182,7 @@ public class MainRestController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}	
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/records", consumes = "application/json", produces = "application/json", method = RequestMethod.PUT)

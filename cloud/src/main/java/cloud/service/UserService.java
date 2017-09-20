@@ -88,4 +88,11 @@ public class UserService implements IUserService {
 		temp.setLastUpdateDate(new Date());
 		repo.save(temp);
 	}
+	
+	@Override
+	public boolean login(User u) throws Exception {
+		User temp = getUserByEmail(u.getEmail());
+		return EncryptionUtility.check(u.getPassword(), temp.getPassword());
+	}
+	
 }
