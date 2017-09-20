@@ -73,6 +73,18 @@ public class MainRestController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/users/{id}/records", produces = "application/json", method = RequestMethod.GET)
+	public ResponseEntity<List<Record>> getUserRecords(@PathVariable(value = "id") int id) {
+		try {
+			return new ResponseEntity<>(userService.getUser(id).getRecords(), HttpStatus.OK);
+		} catch (RuntimeException ex) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/users", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)

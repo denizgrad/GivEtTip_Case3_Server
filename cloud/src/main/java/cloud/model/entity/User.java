@@ -32,7 +32,8 @@ public class User extends BaseModel implements Serializable {
 	private boolean active;
 	
 	@OneToMany(mappedBy="author", fetch=FetchType.EAGER)
-	@JsonManagedReference
+//	@JsonManagedReference
+	@JsonIgnore
 	private List<Record> records;
 	
 	/* public methods */

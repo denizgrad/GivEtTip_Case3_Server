@@ -18,7 +18,7 @@ public class Record extends BaseModel implements Serializable {
 //	private int id;
 	
 	@ManyToOne
-	@JsonBackReference
+//	@JsonBackReference
 	private User author;
 	
 	@Column(nullable = false)
