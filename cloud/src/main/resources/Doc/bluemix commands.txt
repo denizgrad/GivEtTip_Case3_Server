@@ -13,7 +13,7 @@ giveettip is the APP_NAME for my bluemix server
 Connect to Bluemix
 	bluemix api https://api.eu-de.bluemix.net
 Login to bluemix
-	bluemix login deuze17
+	bluemix login manov17@student.sdu.dk
 if no org or space set execute auto-detect
 	bluemix target --cf
 	
@@ -36,4 +36,4 @@ first time config:
 }
 
 Push war file (go to target folder)
-bluemix app push getJavaApi -p .\cloud.war
+bluemix app push getJavaApi -p cloud.war
