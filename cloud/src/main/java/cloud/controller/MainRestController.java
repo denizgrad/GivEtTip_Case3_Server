@@ -85,7 +85,26 @@ public class MainRestController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+//DENIZ TEST
+	@ResponseBody
+	@RequestMapping(value = "/createUser", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+	public ResponseEntity<Response> createUser2(@RequestBody User user) {
+		try {
+			userService.createUser(user);
+			Response resp = new Response(true, HttpStatus.CREATED.value(), "Success");
+			resp.setReturnKey(Integer.toString(user.getId()));
+			return new ResponseEntity<>(resp, HttpStatus.CREATED);
+		} catch (Exception e) {
+			if (userService.doesUserExists(user.getEmail())) {
+				Response resp = new Response(false, HttpStatus.CONFLICT.value(),
+						"User with this email already exists.");
+				return new ResponseEntity<>(resp, HttpStatus.CONFLICT);
+			} else {
+				Response resp = new Response(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.toString());
+				return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+	}
 	@ResponseBody
 	@RequestMapping(value = "/users", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Response> createUser(@RequestBody User user) {
@@ -143,8 +162,8 @@ public class MainRestController {
 	@RequestMapping(value = "/login", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Response> login(@RequestBody User user) {
 		try {
-			boolean success = userService.login(user);
-			if (success) {
+			int returnKey = userService.login(user);//if false return -1
+			if (returnKey != -1) {
 				Response resp = new Response(true, HttpStatus.OK.value(), "Success");
 				resp.setReturnKey(Integer.toString(user.getId()));
 				return new ResponseEntity<>(resp, HttpStatus.OK);

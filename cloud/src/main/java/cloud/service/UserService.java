@@ -9,6 +9,9 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +21,7 @@ import cloud.repository.UserRepositoriy;
 
 @Component
 @Transactional
-public class UserService implements IUserService {
+public class UserService implements IUserService, UserDetailsService {
 	@Autowired
 	Environment env;
 
@@ -90,9 +93,21 @@ public class UserService implements IUserService {
 	}
 	
 	@Override
-	public boolean login(User u) throws Exception {
+	public int login(User u) throws Exception {
 		User temp = getUserByEmail(u.getEmail());
-		return EncryptionUtility.check(u.getPassword(), temp.getPassword());
+		if(EncryptionUtility.check(u.getPassword(), temp.getPassword())) {
+			return temp.getId();
+		}
+		return -1;
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = getUserByEmail(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        return new User.UserWrapper(user);
 	}
 	
 }

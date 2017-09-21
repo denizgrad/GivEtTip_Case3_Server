@@ -12,5 +12,5 @@ public interface IUserService {
 	public void createUser(User u) throws Exception;
 	public void updateUser(User newUser) throws Exception;
 	public void deleteUser(int id);
-	public boolean login(User u) throws Exception;
+	public int login(User u) throws Exception;
 }
