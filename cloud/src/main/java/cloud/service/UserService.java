@@ -21,7 +21,7 @@ import cloud.repository.UserRepositoriy;
 
 @Component
 @Transactional
-public class UserService implements IUserService, UserDetailsService {
+public class UserService implements IUserService {
 	@Autowired
 	Environment env;
 
@@ -101,13 +101,4 @@ public class UserService implements IUserService, UserDetailsService {
 		return -1;
 	}
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = getUserByEmail(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(username);
-        }
-        return new User.UserWrapper(user);
-	}
-	
 }
