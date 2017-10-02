@@ -90,9 +90,9 @@ public class MainRestController {
 	@RequestMapping(value = "/users", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Response> createUser(@RequestBody User user) {
 		try {
-			userService.createUser(user);
+			User newUser = userService.createUser(user);
 			Response resp = new Response(true, HttpStatus.CREATED.value(), "Success");
-			resp.setReturnKey(Integer.toString(user.getId()));
+			resp.setReturnKey(Integer.toString(newUser.getId()));
 			return new ResponseEntity<>(resp, HttpStatus.CREATED);
 		} catch (Exception e) {
 			if (userService.doesUserExists(user.getEmail())) {
@@ -186,9 +186,9 @@ public class MainRestController {
 	@RequestMapping(value = "/records", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Response> createRecord(@RequestBody Record record) {
 		try {
-			recordService.createRecord(record);
+			Record newRecord = recordService.createRecord(record);
 			Response resp = new Response(true, HttpStatus.CREATED.value(), "Success");
-			resp.setReturnKey(Integer.toString(record.getId()));
+			resp.setReturnKey(Integer.toString(newRecord.getId()));
 			return new ResponseEntity<>(resp, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

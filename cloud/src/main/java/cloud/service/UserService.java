@@ -56,13 +56,14 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public void createUser(User u) throws Exception {
+	public User createUser(User u) throws Exception {
 		u.setPassword(EncryptionUtility.getSaltedHash(u.getPassword()));
 		u.setCreatedDate(new Date());
 		u.setLastUpdateDate(new Date());
 		u.setActive(true);
 		u.setDeleted(false);
-		repo.save(u);
+		User newUser = repo.save(u);
+		return newUser;
 	}
 
 	@Override

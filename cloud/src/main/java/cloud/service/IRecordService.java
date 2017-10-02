@@ -7,7 +7,7 @@ import cloud.model.entity.Record;
 public interface IRecordService {
 	public List<Record> getRecords();
 	public Record getRecord(int id);
-	public void createRecord(Record r);
+	public Record createRecord(Record r);
 	public void updateRecord(Record newRecord);
 	public void deleteRecord(int id);
 }

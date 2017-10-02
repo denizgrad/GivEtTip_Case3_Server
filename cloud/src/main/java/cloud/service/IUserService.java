@@ -9,7 +9,7 @@ public interface IUserService {
 	public User getUser(int id);
 	public User getUserByEmail(String email);
 	public boolean doesUserExists(String email);
-	public void createUser(User u) throws Exception;
+	public User createUser(User u) throws Exception;
 	public void updateUser(User newUser) throws Exception;
 	public void deleteUser(int id);
 	public int login(User u) throws Exception;
