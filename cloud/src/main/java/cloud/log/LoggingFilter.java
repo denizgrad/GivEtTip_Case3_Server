@@ -34,7 +34,9 @@ public class LoggingFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
 //            response.flushBuffer();
-        } finally {
+        }catch (Exception e) {
+        	System.out.println(e);
+		} finally {
         	logRequest(request);
                 logResponse((ResponseWrapper) response);
         }
@@ -70,7 +72,8 @@ public class LoggingFilter extends OncePerRequestFilter {
                         "UTF-8";
                 String str = new String(requestWrapper.toByteArray(), charEncoding);
                 str = "".equals(str) || str == null ? "{}" : str; 
-                	msg.append("; payload=").append(JsonFormatter.format(new JSONObject(str)));
+//                	msg.append("; payload=").append(JsonFormatter.format(new JSONObject(str)));
+                msg.append("; payload=").append(str);
             } catch (UnsupportedEncodingException e) {
                 logger.warn("Failed to parse request payload", e);
             }
@@ -97,8 +100,8 @@ public class LoggingFilter extends OncePerRequestFilter {
         msg.append("request id=").append((response.getId()));
         try {
         	 if (StringUtils.isNotBlank(response.getContentType())){
-//        		 msg.append("; payload=").append(new String(response.toByteArray(), response.getCharacterEncoding()));
-        		 msg.append("; payload=").append(JsonFormatter.format(new JSONObject(new String(response.toByteArray(), response.getCharacterEncoding()))));
+//        		 msg.append("; payload=").append(JsonFormatter.format(new JSONObject(new String(response.toByteArray(), response.getCharacterEncoding()))));
+        		 msg.append("; payload=").append(new String(response.toByteArray(), response.getCharacterEncoding()));
         	 }
         } catch (UnsupportedEncodingException e) {
             logger.warn("Failed to parse response payload", e);
