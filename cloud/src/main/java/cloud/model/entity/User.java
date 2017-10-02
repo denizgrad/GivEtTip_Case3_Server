@@ -2,7 +2,6 @@ package cloud.model.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -17,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-public class User extends BaseModel implements Serializable {
+public class User extends BaseModel implements Serializable, Comparable<User> {
 	@Column(nullable = false)
 	private String name;
 	
@@ -89,4 +88,11 @@ public class User extends BaseModel implements Serializable {
 		} 
 		return score;
 	}
+	
+	@Override
+    public int compareTo(User that) {
+		BigDecimal xScore = this.getScore();
+		BigDecimal yScore = that.getScore();
+		return xScore.compareTo(yScore);
+    }
 }

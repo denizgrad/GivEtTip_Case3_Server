@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import cloud.model.entity.Rank;
 import cloud.model.entity.Record;
 import cloud.model.entity.Sample;
 import cloud.model.entity.User;
 import cloud.model.response.Response;
+import cloud.service.IRankService;
 import cloud.service.IRecordService;
 import cloud.service.ISampleService;
 import cloud.service.IUserService;
@@ -32,6 +34,9 @@ public class MainRestController {
 
 	@Autowired
 	IRecordService recordService;
+	
+	@Autowired
+	IRankService rankService;
 
 	/*
 	 * @ResponseBody
@@ -220,6 +225,18 @@ public class MainRestController {
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		} catch (RuntimeException ex) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
+	/* Ranking Rest Controller */
+	@ResponseBody
+	@RequestMapping(value = "/rankings", produces = "application/json", method = RequestMethod.GET)
+	public ResponseEntity<List<Rank>> getRankings() {
+		try {
+			return new ResponseEntity<>(rankService.getRanking(), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
