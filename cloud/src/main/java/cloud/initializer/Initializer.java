@@ -7,6 +7,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 import cloud.config.WebMvcConfig;
 import cloud.initializer.filter.CORSFilter;
+import cloud.log.LoggingFilter;
 
 public class Initializer extends AbstractAnnotationConfigDispatcherServletInitializer {
  
@@ -27,7 +28,8 @@ public class Initializer extends AbstractAnnotationConfigDispatcherServletInitia
     
     @Override
     protected Filter[] getServletFilters() {
-    	Filter [] singleton = { new CharacterEncodingFilter("UTF-8"), new CORSFilter()};
+    	Filter [] singleton = { new CharacterEncodingFilter("UTF-8"), new CORSFilter(), new LoggingFilter()};
+        
     	return singleton;
     }
 
