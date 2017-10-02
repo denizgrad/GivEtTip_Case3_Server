@@ -30,8 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter   {
 	public void postConstruct() {
 		System.out.println("SecurityConfig is up and running");
 	}
-	@Autowired
-	UserDetailsService authenticationService;
+//	@Autowired
+//	UserDetailsService authenticationService;
 	
 //    @Autowired //In case of jpa authentication
 //    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
