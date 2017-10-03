@@ -14,13 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cloud.model.entity.Rank;
 import cloud.model.entity.Record;
+import cloud.model.entity.RecordCoordinate;
 import cloud.model.entity.Sample;
 import cloud.model.entity.User;
 import cloud.model.response.Response;
 import cloud.service.IRankService;
+import cloud.service.IRecordCoordinateService;
 import cloud.service.IRecordService;
 import cloud.service.ISampleService;
 import cloud.service.IUserService;
+import cloud.service.RecordCoordinateService;
 
 @RestController
 @RequestMapping("/main")
@@ -34,6 +37,9 @@ public class MainRestController {
 
 	@Autowired
 	IRecordService recordService;
+	
+	@Autowired
+	IRecordCoordinateService recordCoordinateService;
 	
 	@Autowired
 	IRankService rankService;
@@ -225,6 +231,16 @@ public class MainRestController {
 			return new ResponseEntity<>(resp, HttpStatus.OK);
 		} catch (RuntimeException ex) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/recordscoordinates", produces = "application/json", method = RequestMethod.GET)
+	public ResponseEntity<List<RecordCoordinate>> getRecordsCoordinates() {
+		try {
+			return new ResponseEntity<>(recordCoordinateService.getRecordsCoordinates(), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
