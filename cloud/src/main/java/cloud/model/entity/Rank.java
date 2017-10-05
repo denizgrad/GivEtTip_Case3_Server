@@ -9,6 +9,7 @@ public class Rank {
 	private int position;
 	private BigDecimal score;
 	private String userEmail;
+	// private String scoreString;
 	
 	public int getId() {
 		return id;
@@ -40,6 +41,9 @@ public class Rank {
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
 	}
+	//public String getScoreString() {
+	//	return this.getPosition() + ": " + this.getUserEmail() + " - " + this.getScore();
+	//}
 	
 	public Rank(int userId, int position, BigDecimal score, String userEmail) {
 		this.userId = userId;
