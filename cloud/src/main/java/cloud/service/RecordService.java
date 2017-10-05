@@ -30,6 +30,7 @@ public class RecordService implements IRecordService{
 	@Override
 	public Record getRecord(int id) {
 		Record r = repo.getRecord(id);
+		r.setImagePath(r.getImagePathLob().toString());
 		if (r != null)
 			return r;
 		else
@@ -38,6 +39,7 @@ public class RecordService implements IRecordService{
 	
 	@Override
 	public Record createRecord(Record r) {
+		r.setImagePathLob(r.getImagePath().getBytes());
 		r.setCreatedDate(new Date());
 		r.setLastUpdateDate(new Date());
 		r.setDeleted(false);

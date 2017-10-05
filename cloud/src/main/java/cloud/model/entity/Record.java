@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -21,8 +22,12 @@ public class Record extends BaseModel implements Serializable {
 //	@JsonBackReference
 	private User author;
 	
-	@Column(nullable = false)
+//	@Column(nullable = false)
 	private String imagePath;
+	
+	@Column(nullable = false)
+	@Lob
+	private byte[] imagePathLob;
 	
 	@Column(nullable = false)
 	private double gpsLatitude;
@@ -74,5 +79,11 @@ public class Record extends BaseModel implements Serializable {
 	}
 	public void setDone(boolean done) {
 		this.done = done;
+	}
+	public byte[] getImagePathLob() {
+		return imagePathLob;
+	}
+	public void setImagePathLob(byte[] imagePathLob) {
+		this.imagePathLob = imagePathLob;
 	}
 }
