@@ -211,7 +211,7 @@ public class MainRestController {
 		record = recordService.createRecord(record);
 		Response resp = new Response(true, HttpStatus.CREATED.value(), "Success");
 		resp.setReturnKey(Integer.toString(record.getId()));
-		return new ResponseEntity<>(resp, HttpStatus.CREATED);
+		return new ResponseEntity<>(resp, HttpStatus.OK);
 	}
 	
 //	@ResponseBody
