@@ -20,6 +20,8 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableWebMvc
@@ -32,6 +34,12 @@ public class WebMvcConfig {
 	@Autowired
 	Environment env;
 	
+	@Bean(name = "multipartResolver")
+	public CommonsMultipartResolver multipartResolver() {
+	    CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+	    multipartResolver.setMaxUploadSize(100000);
+	    return new CommonsMultipartResolver();
+	}
 	@Bean
 	public Filter loggingFilter(){
 	    AbstractRequestLoggingFilter f = new AbstractRequestLoggingFilter() {

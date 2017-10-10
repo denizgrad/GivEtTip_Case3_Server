@@ -63,9 +63,8 @@ public class LoggingFilter extends OncePerRequestFilter {
         if (request.getQueryString() != null) {
             msg.append('?').append(request.getQueryString());
         }
-
+        RequestWrapper requestWrapper = (RequestWrapper) request;
         if (request instanceof RequestWrapper && !isMultipart(request) && !isBinaryContent(request)) {
-            RequestWrapper requestWrapper = (RequestWrapper) request;
             try {
             	// TODO deniz check it ( String str = new String(requestWrapper.toByteArray(), charEncoding); );
                 String charEncoding = requestWrapper.getCharacterEncoding() != null ? requestWrapper.getCharacterEncoding() :
@@ -78,6 +77,8 @@ public class LoggingFilter extends OncePerRequestFilter {
                 logger.warn("Failed to parse request payload", e);
             }
 
+        } else {
+        	msg.append("; Multipart request=").append(requestWrapper.toByteArray().length + " bytes" );
         }
         System.out.println("Call Logs:");
         logger.info(msg.toString());

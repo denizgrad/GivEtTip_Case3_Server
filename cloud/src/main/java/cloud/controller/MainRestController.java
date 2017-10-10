@@ -1,7 +1,10 @@
 package cloud.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,21 +12,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cloud.model.entity.Rank;
 import cloud.model.entity.Record;
 import cloud.model.entity.RecordCoordinate;
-import cloud.model.entity.Sample;
 import cloud.model.entity.User;
 import cloud.model.response.Response;
 import cloud.service.IRankService;
 import cloud.service.IRecordCoordinateService;
 import cloud.service.IRecordService;
-import cloud.service.ISampleService;
 import cloud.service.IUserService;
-import cloud.service.RecordCoordinateService;
 
 @RestController
 @RequestMapping("/main")
@@ -193,8 +200,22 @@ public class MainRestController {
 		}
 	}
 
-	@ResponseBody
-	@RequestMapping(value = "/records", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value = "/records", method = RequestMethod.POST, consumes = "multipart/form-data")
+    public @ResponseBody ResponseEntity<Response>  createRecordMultiPart(@RequestPart("jsonFile") MultipartFile file) throws JsonParseException, JsonMappingException, IOException {
+		
+		ByteArrayInputStream stream = new   ByteArrayInputStream(file.getBytes());
+		String myString = IOUtils.toString(stream, "UTF-8");
+//		System.out.println("GOT FILE : " + myString);
+		ObjectMapper mapper = new ObjectMapper();
+		Record record = mapper.readValue(myString, Record.class);
+		record = recordService.createRecord(record);
+		Response resp = new Response(true, HttpStatus.CREATED.value(), "Success");
+		resp.setReturnKey(Integer.toString(record.getId()));
+		return new ResponseEntity<>(resp, HttpStatus.CREATED);
+	}
+	
+//	@ResponseBody
+//	@RequestMapping(value = "/records", consumes = "application/json", produces = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Response> createRecord(@RequestBody Record record) {
 		try {
 			Record newRecord = recordService.createRecord(record);
